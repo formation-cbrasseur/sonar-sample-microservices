@@ -1,0 +1,35 @@
+services:
+  mongoDbServiceCatalog:
+    image: mongo
+    container_name: mongoDbServiceCatalog
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongoDbDataCatalog:/data/db
+    
+  mongoDbServiceInventory:
+    image: mongo
+    container_name: mongoDbServiceInventory
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongoDbDataInventory:/data/db
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    volumes:
+      - rabbitmqData:/var/lib/rabbitmq
+    hostname: rabbitmq
+
+
+volumes:
+  mongoDbDataCatalog:
+  mongoDbDataInventory:
+  rabbitmqData:
