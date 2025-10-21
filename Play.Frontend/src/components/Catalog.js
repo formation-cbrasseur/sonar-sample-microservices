@@ -42,8 +42,9 @@ export class Catalog extends Component
   }
   deleteItemFromState = id =>
   {
-    const updated = this.state.items.filter(item => item.id !== id);
-    this.setState({ items: updated })
+    this.setState(previous => ({
+      items: previous.items.filter(item => item.id !== id)
+    }));
   }
   deleteItem(id)
   {
