@@ -9,6 +9,8 @@ export default class GrantItemForm extends React.Component
         userId: uuidv4(),
         quantity: 1,
         alertVisible: false,
+        alertColor: 'danger',
+        alertMessage: '',
         validated: false
     }
 
@@ -42,7 +44,7 @@ export default class GrantItemForm extends React.Component
         this.setState({ validated: true });
     }
 
-    async grantItem()
+    grantItem()
     {
         fetch(`${window.INVENTORY_ITEMS_API_URL}`, {
             method: 'post',
@@ -52,7 +54,7 @@ export default class GrantItemForm extends React.Component
             body: JSON.stringify({
                 userId: this.state.userId,
                 catalogItemId: this.state.id,
-                quantity: parseInt(this.state.quantity)
+                quantity: parseInt(this.state.quantity, 10)
             })
         })
             .then(async response =>

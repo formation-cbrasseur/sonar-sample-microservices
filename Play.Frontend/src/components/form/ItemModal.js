@@ -13,7 +13,7 @@ export default class ItemModal extends Component {
     render() {
         const isNew = this.props.isNew;
         let title = 'Edit Item';
-        let button = '';
+        let button = null;
         if (isNew) {
             title = 'Add Item';
             button = <Button
