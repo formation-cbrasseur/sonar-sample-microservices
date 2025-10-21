@@ -18,16 +18,14 @@ export class Catalog extends Component
     this.populateItems();
   }
 
-  async populateItems()
+  populateItems()
   {
     fetch(`${window.CATALOG_ITEMS_API_URL}`)
-      .then(response => { 
-        return response.json(); 
-      })
+      .then(response => response.json())
       .then(returnedItems => this.setState({ items: returnedItems, loading: false, loadedSuccess: true }))
       .catch(err =>
       {
-        console.log(err);
+        console.error(err);
         this.setState({ items: [], loading: false, loadedSuccess: false })
       });
   }
@@ -38,7 +36,7 @@ export class Catalog extends Component
       items: [...previous.items, item]
     }));
   }
-  updateState = (id) =>
+  updateState = () =>
   {
     this.populateItems();
   }
@@ -47,7 +45,7 @@ export class Catalog extends Component
     const updated = this.state.items.filter(item => item.id !== id);
     this.setState({ items: updated })
   }
-  async deleteItem(id)
+  deleteItem(id)
   {
     let confirmDeletion = window.confirm('Do you really wish to delete it?');
     if (confirmDeletion)
@@ -58,13 +56,13 @@ export class Catalog extends Component
           'Content-Type': 'application/json'
         }
       })
-        .then(res =>
+        .then(() =>
         {
           this.deleteItemFromState(id);
         })
         .catch(err =>
         {
-          console.log(err);
+          console.error(err);
           window.alert("Could not delete the item.");
         });
     }
@@ -87,7 +85,7 @@ export class Catalog extends Component
             <tbody>
               {!items || items.length <= 0 ?
                 <tr>
-                  <td colSpan="6" align="center"><b>No Items yet</b></td>
+                  <td colSpan={6} style={{ textAlign: "center" }}><b>No Items yet</b></td>
                 </tr>
                 : items.map(item => (
                   <tr key={item.id}>
@@ -100,7 +98,7 @@ export class Catalog extends Component
                     <td>
                       {item.price}
                     </td>
-                    <td align="center">
+                    <td style={{ textAlign: "center" }}>
                       <div>
                         <ItemModal
                           isNew={false}

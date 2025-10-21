@@ -9,6 +9,8 @@ export default class ItemForm extends React.Component
         description: '',
         price: '',
         alertVisible: false,
+        alertColor: 'danger',
+        alertMessage: '',
         validated: false
     }
 
@@ -42,7 +44,7 @@ export default class ItemForm extends React.Component
         this.setState({ validated: true });
     }
 
-    async createItem()
+    createItem()
     {
         fetch(`${window.CATALOG_ITEMS_API_URL}`, {
             method: 'post',
@@ -94,7 +96,7 @@ export default class ItemForm extends React.Component
         this.setState({ validated: true });
     }
 
-    async updateItem()
+    updateItem()
     {
         fetch(`${window.CATALOG_ITEMS_API_URL}/${this.state.id}`, {
             method: 'put',

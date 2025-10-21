@@ -16,7 +16,7 @@ export class Inventory extends Component
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  async populateItems()
+  populateItems()
   {
     if (this.state.userId === '')
     {
@@ -29,7 +29,7 @@ export class Inventory extends Component
       .then(returnedItems => this.setState({ items: returnedItems, loading: false, loadedSuccess: true }))
       .catch(err =>
       {
-        console.log(err);
+        console.error(err);
         this.setState({ items: [], loading: false, loadedSuccess: false })
       });
   }
@@ -53,43 +53,59 @@ export class Inventory extends Component
 
   renderItemsTable()
   {
-    return this.state.renderItems === false ? ''
-      : this.state.loading ? <p><em>Loading...</em></p>
-        : this.state.loadedSuccess === false ? <p>Could not load items</p>
-          : <Container style={{ paddingTop: "10px", paddingLeft: "0px" }}>
-            <Row>
-              <Col>
-                <Table striped>
-                  <thead className="thead-dark">
-                    <tr>
-                      <th>Name</th>
-                      <th>Description</th>
-                      <th>Quantity</th>
+    if (!this.state.renderItems)
+    {
+      return null;
+    }
+
+    if (this.state.loading)
+    {
+      return <p><em>Loading...</em></p>;
+    }
+
+    if (!this.state.loadedSuccess)
+    {
+      return <p>Could not load items</p>;
+    }
+
+    return (
+      <Container style={{ paddingTop: "10px", paddingLeft: "0px" }}>
+        <Row>
+          <Col>
+            <Table striped>
+              <thead className="thead-dark">
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {!this.state.items || this.state.items.length <= 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: "center" }}><b>No Items yet</b></td>
+                  </tr>
+                ) : (
+                  this.state.items.map(item => (
+                    <tr key={item.catalogItemId}>
+                      <td>
+                        {item.name}
+                      </td>
+                      <td>
+                        {item.description}
+                      </td>
+                      <td>
+                        {item.quantity}
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {!this.state.items || this.state.items.length <= 0 ?
-                      <tr>
-                        <td colSpan="6" align="center"><b>No Items yet</b></td>
-                      </tr>
-                      : this.state.items.map(item => (
-                        <tr key={item.catalogItemId}>
-                          <td>
-                            {item.name}
-                          </td>
-                          <td>
-                            {item.description}
-                          </td>
-                          <td>
-                            {item.quantity}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
-          </Container>;
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+      </Container>
+    );
   }
 
   render()
